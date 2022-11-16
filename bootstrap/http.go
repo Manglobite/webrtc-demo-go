@@ -11,7 +11,8 @@ import (
 	"github.com/webrtc-demo-go/config"
 )
 
-// Rest Отправьте HTTP-запрос на открытую платформу и верните полезную нагрузку ответа открытой платформы на верхний уровень.
+// Rest Отправьте HTTP-запрос на открытую платформу и верните
+// полезную нагрузку ответа открытой платформы на верхний уровень.
 func Rest(method string, url string, body io.Reader) (res []byte, err error) {
 	client := &http.Client{
 		Timeout: time.Second * 5,

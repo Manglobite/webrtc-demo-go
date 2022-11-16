@@ -52,7 +52,9 @@ func Start() (err error) {
 	log.Printf("publish topic: %s", publishTopic)
 	log.Printf("subscribe topic: %s", subscribeTopic)
 
-	// !!!При отправке сообщений mqtt from не является идентификатором пользователя в webrtc.json, его необходимо обновить до идентификатора в теме подписки, возвращаемой открытой платформой!!!
+	// !!!При отправке сообщений mqtt from не является идентификатором
+	// пользователя в webrtc.json, его необходимо обновить до идентификатора
+	// в теме подписки, возвращаемой открытой платформой!!!
 	parts := strings.Split(subscribeTopic, "/")
 	config.App.MQTTUID = parts[3]
 
