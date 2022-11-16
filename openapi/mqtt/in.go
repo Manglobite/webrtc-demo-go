@@ -2,17 +2,19 @@ package openmqtt
 
 import (
 	"encoding/json"
+	"log"
+	"strings"
+
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gorilla/websocket"
 	"github.com/webrtc-demo-go/bootstrap"
 	"github.com/webrtc-demo-go/types"
-	"log"
-	"strings"
 )
 
-// mqtt消息接受回调函数
+// сообщение mqtt принимает функцию обратного вызова
 func consume(client mqtt.Client, msg mqtt.Message) {
-	// 接受的mqtt消息体可为多种类型，先用反序列化到临时对象，json.RawMessage([]byte)存储消息体，在对应的handler反序列化到对应对象
+	// Принятое тело сообщения mqtt может быть разных типов, сначала используйте десериализацию во временный объект,
+	// json.RawMessage([]byte) сохраняет тело сообщения и десериализует в соответствующий объект в соответствующем обработчике.
 	tmp := struct {
 		Protocol int    `json:"protocol"`
 		Pv       string `json:"pv"`
@@ -48,7 +50,7 @@ func consume(client mqtt.Client, msg mqtt.Message) {
 	dispatch(rmqtt)
 }
 
-// 分发从mqtt服务器接受到的消息
+// Распространять сообщения, полученные от сервера mqtt
 func dispatch(msg *MqttMessage) {
 	link, err := bootstrap.GetLink(msg.Data.Header.SessionID)
 	if err != nil {

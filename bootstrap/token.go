@@ -3,13 +3,14 @@ package bootstrap
 import (
 	"errors"
 	"fmt"
-	"github.com/tidwall/gjson"
-	"github.com/webrtc-demo-go/config"
 	"log"
 	"time"
+
+	"github.com/tidwall/gjson"
+	"github.com/webrtc-demo-go/config"
 )
 
-// InitToken 根据授权码获取token
+// InitToken Получить токен на основе кода авторизации
 func InitToken() (err error) {
 	var url string
 
@@ -36,13 +37,13 @@ func InitToken() (err error) {
 		return
 	}
 
-	// 启动token维护更新协程
+	// Запустите сопрограмму обновления обслуживания токенов
 	go maintainToken()
 
 	return
 }
 
-// 后续使用refrensh_token刷新token，并得到新的refresh_token
+// Последующее использование refresh_token для обновления токена и получения нового refresh_token
 func refreshToken() (err error) {
 	url := fmt.Sprintf("https://%s/v1.0/token/%s", config.App.OpenAPIURL, config.App.RefreshToken)
 
@@ -63,7 +64,7 @@ func refreshToken() (err error) {
 	return
 }
 
-// 同步OpenAPI token服务接口的Response到Sample全局App配置
+// Синхронизируйте ответ интерфейса службы токенов OpenAPI с образцом глобальной конфигурации приложения.
 func syncToConfig(body []byte) error {
 	uIdValue := gjson.GetBytes(body, "result.uid")
 	if !uIdValue.Exists() {
@@ -114,9 +115,9 @@ func syncToConfig(body []byte) error {
 	return nil
 }
 
-// 第一次获取token成功后，需要定期维护更新token
-// 如果更新失败，则每60 Sec再次更新
-// 如果更新成功，则在token失效前300 Sec更新
+// После успешного получения токена в первый раз требуется регулярное обслуживание и обновление токена.
+// Если обновление не удалось, обновляйте снова каждые 60 сек.
+// Если обновление прошло успешно, оно будет обновлено за 300 секунд до истечения срока действия токена.
 func maintainToken() {
 	interval := config.App.ExpireTime - 300
 

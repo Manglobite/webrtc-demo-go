@@ -5,15 +5,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
+	"strings"
+
 	"github.com/google/uuid"
 	"github.com/tidwall/gjson"
 	"github.com/webrtc-demo-go/config"
 	"github.com/webrtc-demo-go/types"
-	"log"
-	"strings"
 )
 
-// GetMotoIDAndAuth 根据用户id和设备id从开放平台获取信令服务moto的id、webRTC认证需要的授权码
+// GetMotoIDAndAuth Получите идентификатор службы сигнализации moto и код авторизации,
+// необходимый для аутентификации через webRTC, с открытой платформы в соответствии с идентификатором пользователя и идентификатором устройства.
 func GetMotoIDAndAuth() (motoID, auth, iceServers string, err error) {
 	url := fmt.Sprintf("https://%s/v1.0/users/%s/devices/%s/webrtc-configs", config.App.OpenAPIURL, config.App.UID, config.App.DeviceID)
 
@@ -80,7 +82,7 @@ func GetMotoIDAndAuth() (motoID, auth, iceServers string, err error) {
 	return
 }
 
-// LoadHubConfig 从开放平台获取mqtt连接信息
+// LoadHubConfig Получить информацию о соединении mqtt с открытой платформы
 func LoadHubConfig() (config *types.OpenIoTHubConfig, err error) {
 	body, err := getOpenIoTHubConfig()
 	if err != nil {

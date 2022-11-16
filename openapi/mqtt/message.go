@@ -1,39 +1,39 @@
 package openmqtt
 
-// MqttFrameHeader mqtt消息帧头
+// MqttFrameHeader заголовок фрейма сообщения mqtt
 type MqttFrameHeader struct {
-	// mqtt消息类型，offer candidate answer disconnect
+	// тип сообщения mqtt, предлагает отключение ответа-кандидата
 	Type string `json:"type"`
 
-	// mqtt消息发送方
+	// отправитель сообщения mqtt
 	From string `json:"from"`
 
-	// mqtt消息接受方
+	// получатель сообщений mqtt
 	To string `json:"to"`
 
-	// 如果发送方或接收方是设备，且是子设备，这里为子设备id
+	// Если отправитель или получатель является устройством и дополнительным устройством, здесь указывается идентификатор дополнительного устройства.
 	SubDevID string `json:"sub_dev_id"`
 
-	// mqtt消息所属的会话id
+	// Идентификатор сеанса, которому принадлежит сообщение mqtt
 	SessionID string `json:"sessionid"`
 
-	// mqtt消息相关的信令服务moto的id
+	// Идентификатор службы сигнализации moto, связанной с сообщением mqtt.
 	MotoID string `json:"moto_id"`
 
-	// 事务id，MQTT控制信令透传时携带
+	// Идентификатор транзакции, передаваемый при прозрачной передаче управляющих сигналов MQTT
 	TransactionID string `json:"tid"`
 }
 
-// MqttFrame mqtt消息帧
+// MqttFrame кадр сообщения mqtt
 type MqttFrame struct {
 	Header  MqttFrameHeader `json:"header"`
-	Message interface{}     `json:"msg"` // mqtt消息体，可为offer candidate answer disconnect，所以为interface{}
+	Message interface{}     `json:"msg"` //В теле сообщения mqtt может быть предложено разъединение кандидата на ответ, так что это interface{}
 }
 
-// MqttMessage mqtt消息（包含顶层协议头）
+// MqttMessage сообщение mqtt (включая заголовок протокола верхнего уровня)
 type MqttMessage struct {
-	Protocol int       `json:"protocol"` // mqtt消息的协议号，webRTC属于实时流服务，为302
-	Pv       string    `json:"pv"`       // 通讯协议版本号
-	T        int64     `json:"t"`        // Unix时间戳，单位为second
+	Protocol int       `json:"protocol"` // Номер протокола сообщения mqtt, webRTC принадлежит службе потоковой передачи в реальном времени, равен 302.
+	Pv       string    `json:"pv"`       // Номер версии протокола связи
+	T        int64     `json:"t"`        // Временная метка Unix, единица измерения — секунда
 	Data     MqttFrame `json:"data"`
 }

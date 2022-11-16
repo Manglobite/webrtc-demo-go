@@ -2,12 +2,13 @@ package bootstrap
 
 import (
 	"errors"
-	"github.com/webrtc-demo-go/types"
 	"sync"
+
+	"github.com/webrtc-demo-go/types"
 )
 
-// WsLinkMgr 管理后端浏览器用户agent id与WebSocket连接的映射关系，增、删、查
-// mqtt通信模式为异步，需要有一个映射关系，使得收到mqtt消息后知道该往哪个WebSocket客户端发送Response
+// WsLinkMgr Управляйте отношениями сопоставления между идентификатором пользовательского агента внутреннего браузера и соединением WebSocket, добавляйте, удаляйте, проверяйте
+// Режим связи mqtt является асинхронным, и должны быть отношения сопоставления, чтобы после получения сообщения mqtt он знал, какому клиенту WebSocket отправить ответ.
 type WsLinkMgr struct {
 	rwMutex sync.RWMutex
 
@@ -26,12 +27,12 @@ func init() {
 	}
 }
 
-// AddLink 增加浏览器用户agent id关联的WebSocket连接
+// AddLink Увеличьте соединение WebSocket, связанное с идентификатором пользовательского агента браузера.
 func AddLink(agentID, sessionID string, msg *types.WsMessage) {
 	wsLinkMgr.rwMutex.Lock()
 	defer wsLinkMgr.rwMutex.Unlock()
 
-	// 一个agent id对应一个网页，一个网页同时只能有一个会话，清理agent id之前关联的会话
+	// Идентификатор агента соответствует веб-странице, и веб-страница может иметь только один сеанс одновременно, и сеанс, связанный до того, как идентификатор агента будет очищен.
 	for session, agent := range wsLinkMgr.session2Agent {
 		if agent == agentID {
 			delete(wsLinkMgr.session2Agent, session)
@@ -43,7 +44,7 @@ func AddLink(agentID, sessionID string, msg *types.WsMessage) {
 	wsLinkMgr.wsLink[agentID] = msg
 }
 
-// GetLink 查询浏览器用户agent id关联的WebSocket连接
+// GetLink Запросите соединение WebSocket, связанное с идентификатором пользовательского агента браузера.
 func GetLink(sessionID string) (link *types.WsMessage, err error) {
 	wsLinkMgr.rwMutex.RLock()
 	defer wsLinkMgr.rwMutex.RUnlock()
@@ -75,7 +76,7 @@ func GetLinkByAgent(agentID string) (link *types.WsMessage, err error) {
 	return
 }
 
-// RemoveLink 删除浏览器用户agent id关联的WebSocket连接
+// RemoveLink Удалите соединение WebSocket, связанное с идентификатором пользовательского агента браузера.
 func RemoveLink(sessionID string) {
 	wsLinkMgr.rwMutex.Lock()
 	defer wsLinkMgr.rwMutex.Unlock()
@@ -93,7 +94,7 @@ func RemoveLink(sessionID string) {
 	}
 }
 
-// RemoveLinkByConnLost 浏览器网页断开WebSocket连接时，清空相关记录
+// RemoveLinkByConnLost Когда веб-страница браузера отключает соединение WebSocket, очистите соответствующие записи.
 func RemoveLinkByConnLost(agentID string) {
 	wsLinkMgr.rwMutex.Lock()
 	defer wsLinkMgr.rwMutex.Unlock()

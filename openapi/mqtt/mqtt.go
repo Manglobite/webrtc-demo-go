@@ -1,12 +1,13 @@
 package openmqtt
 
 import (
-	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"github.com/webrtc-demo-go/bootstrap"
-	"github.com/webrtc-demo-go/config"
 	"log"
 	"strings"
 	"time"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/webrtc-demo-go/bootstrap"
+	"github.com/webrtc-demo-go/config"
 )
 
 var (
@@ -51,7 +52,7 @@ func Start() (err error) {
 	log.Printf("publish topic: %s", publishTopic)
 	log.Printf("subscribe topic: %s", subscribeTopic)
 
-	// !!! 发送mqtt消息时，from不是webrtc.json中的用户id，需要更新为开放平台返回的订阅topic中的id !!!
+	// !!!При отправке сообщений mqtt from не является идентификатором пользователя в webrtc.json, его необходимо обновить до идентификатора в теме подписки, возвращаемой открытой платформой!!!
 	parts := strings.Split(subscribeTopic, "/")
 	config.App.MQTTUID = parts[3]
 
@@ -86,12 +87,12 @@ func FetchWebRTCConfigs() (err error) {
 	return nil
 }
 
-// IceServers 返回开放平台返回的Ice Token
+// IceServers Верните лед, возвращенный открытой платформой Token
 func IceServers() string {
 	return iceServers
 }
 
-// mqtt连接成功的回调函数，订阅开放平台返回的topic，接受mqtt消息
+// Функция обратного вызова успешного соединения mqtt, подписка на тему, возвращаемую открытой платформой, и получение сообщений mqtt
 func onConnect(client mqtt.Client) {
 	options := client.OptionsReader()
 

@@ -2,10 +2,11 @@ package openmqtt
 
 import (
 	"encoding/json"
-	"github.com/webrtc-demo-go/config"
-	"github.com/webrtc-demo-go/types"
 	"log"
 	"time"
+
+	"github.com/webrtc-demo-go/config"
+	"github.com/webrtc-demo-go/types"
 )
 
 func Post(msg *types.WsMessage) {
@@ -23,10 +24,10 @@ func Post(msg *types.WsMessage) {
 
 func sendOffer(msg *types.WsMessage, sdp string) {
 	offerFrame := struct {
-		Mode       string `json:"mode"`        // offer的模式，默认为webrtc
-		Sdp        string `json:"sdp"`         // 浏览器生成的offer
-		StreamType uint32 `json:"stream_type"` // 码流类型，默认为1
-		Auth       string `json:"auth"`        // webRTC认证需要的授权码，从开放平台获取
+		Mode       string `json:"mode"`        // режим предложения, по умолчанию — webrtc
+		Sdp        string `json:"sdp"`         // Предложение, сгенерированное браузером
+		StreamType uint32 `json:"stream_type"` // тип потока кода, по умолчанию 1
+		Auth       string `json:"auth"`        // Код авторизации, необходимый для аутентификации через webRTC, получен с открытой платформы
 	}{
 		Mode:       "webrtc",
 		Sdp:        sdp,
@@ -63,8 +64,8 @@ func sendOffer(msg *types.WsMessage, sdp string) {
 
 func sendCandidate(msg *types.WsMessage, candidate string) {
 	candidateFrame := struct {
-		Mode      string `json:"mode"`      // candidate的模式，默认为webrtc
-		Candidate string `json:"candidate"` // 候选地址，a=candidate:1922393870 1 UDP 2130706431 192.168.1.171 51532 typ host
+		Mode      string `json:"mode"`      // Кандидатский режим, по умолчанию webrtc
+		Candidate string `json:"candidate"` // адрес кандидата，a=candidate:1922393870 1 UDP 2130706431 192.168.1.171 51532 typ host
 	}{
 		Mode:      "webrtc",
 		Candidate: candidate,
@@ -101,7 +102,7 @@ func sendDisconnect(msg *types.WsMessage) {
 	disconnectFrame := struct {
 		Mode string `json:"mode"`
 	}{
-		Mode: "webrtc", // disconnect的模式，默认为webrtc
+		Mode: "webrtc", // Режим отключения, по умолчанию — webrtc
 	}
 
 	disconnectMqtt := &MqttMessage{
@@ -131,7 +132,7 @@ func sendDisconnect(msg *types.WsMessage) {
 	publish(sendBytes)
 }
 
-// 发布mqtt消息
+// Опубликовать сообщение mqtt
 func publish(payload []byte) {
 	token := client.Publish(publishTopic, 1, false, payload)
 	if token.Error() != nil {

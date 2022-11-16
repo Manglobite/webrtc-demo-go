@@ -1,6 +1,6 @@
 # Tuya RTC Web Demo
 
-[English](README.md) | [中文版](README_cn.md)
+[English](README.md) | [Китайская версия](README_cn.md)
 ## Overview
 The WebRTC SDK helps developers quickly access IPC services.
 

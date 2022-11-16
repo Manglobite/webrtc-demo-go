@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// ListenAndServe 托管Web资源，供浏览器访问，最好使用Chrome浏览器
+// ListenAndServe размещает веб-ресурсы для доступа через браузер, предпочтительно Chrome
 func ListenAndServe() {
 	fs := http.FileServer(http.Dir("./static"))
 

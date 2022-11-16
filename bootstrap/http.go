@@ -1,16 +1,17 @@
 package bootstrap
 
 import (
-	"github.com/webrtc-demo-go/config"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/webrtc-demo-go/config"
 )
 
-// Rest 向开放平台发送HTTP请求，返回开放平台回复的payload给上层
+// Rest Отправьте HTTP-запрос на открытую платформу и верните полезную нагрузку ответа открытой платформы на верхний уровень.
 func Rest(method string, url string, body io.Reader) (res []byte, err error) {
 	client := &http.Client{
 		Timeout: time.Second * 5,

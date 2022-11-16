@@ -1,12 +1,13 @@
 package main
 
 import (
+	"log"
+
 	"github.com/webrtc-demo-go/bootstrap"
 	"github.com/webrtc-demo-go/config"
 	"github.com/webrtc-demo-go/http"
 	openmqtt "github.com/webrtc-demo-go/openapi/mqtt"
 	"github.com/webrtc-demo-go/websocket"
-	"log"
 
 	"sync"
 )
@@ -30,13 +31,13 @@ func startWebRTCSample() {
 		return
 	}
 
-	// 根据授权码获取开放平台服务Token，并定时更新Token
+	// Получите токен службы открытой платформы в соответствии с кодом авторизации и регулярно обновляйте токен.
 	if err := bootstrap.InitToken(); err != nil {
 		log.Printf("init token fail: %s", err.Error())
 		return
 	}
 
-	// mqtt接入开放平台前，需要先通过Restful接口获取相关的配置来启动mqtt客户端
+	// Прежде чем mqtt получит доступ к открытой платформе, вам необходимо получить соответствующую конфигурацию через интерфейс Restful, чтобы запустить клиент mqtt.
 	if config.App.OpenAPIMode == "mqtt" {
 		if err := openmqtt.Start(); err != nil {
 			log.Printf("start mqtt fail: %s", err.Error())
@@ -45,9 +46,9 @@ func startWebRTCSample() {
 		}
 	}
 
-	// 启动web server
+	// Запустите веб-сервер
 	go http.ListenAndServe()
 
-	// 启动websocket server
+	// Запустите веб-сервер
 	go websocket.ListenAndServe()
 }
