@@ -32,7 +32,8 @@ func AddLink(agentID, sessionID string, msg *types.WsMessage) {
 	wsLinkMgr.rwMutex.Lock()
 	defer wsLinkMgr.rwMutex.Unlock()
 
-	// Идентификатор агента соответствует веб-странице, и веб-страница может иметь только один сеанс одновременно, и сеанс, связанный до того, как идентификатор агента будет очищен.
+	// Идентификатор агента соответствует веб-странице, и веб-страница может
+	// иметь только один сеанс одновременно, и сеанс, связанный до того, как идентификатор агента будет очищен.
 	for session, agent := range wsLinkMgr.session2Agent {
 		if agent == agentID {
 			delete(wsLinkMgr.session2Agent, session)

@@ -5,36 +5,38 @@ import (
 	"io/ioutil"
 )
 
-// Easy 简单模式，需要手动填入想要访问的IPC所属的uId
+// Easy В простом режиме вам нужно вручную заполнить uId IPC, к которому вы хотите получить доступ
 type Easy struct {
 	UID string `json:"uId"`
 }
 
-// Auth 授权码模式，需要在涂鸦开放平台授权页面上输入用户的账号密码进行授权，并在此填入返回的授权码
+// Auth В режиме кода авторизации для авторизации необходимо ввести
+// пароль учетной записи пользователя на странице авторизации Tuya Open Platform,
+// а возвращенный код авторизации заполнить здесь
 type Auth struct {
 	Code string `json:"code"`
 }
 
-// APPConfig Sample运行的应用配置
+// APPConfig Sample Запуск конфигурации приложения
 type APPConfig struct {
-	OpenAPIMode string `json:"openAPIMode"` // 连接涂鸦开放平台的模式，暂时只支持mqtt
-	OpenAPIURL  string `json:"openAPIUrl"`  // 涂鸦开放平台URL
+	OpenAPIMode string `json:"openAPIMode"` // Режим подключения к открытой платформе Tuya пока поддерживает только mqtt
+	OpenAPIURL  string `json:"openAPIUrl"`  // URL-адрес открытой платформы Tuya
 
-	ClientID string `json:"clientId"` // 涂鸦开放平台申请的appId
-	Secret   string `json:"secret"`   // 涂鸦开放平台申请的secretKey
+	ClientID string `json:"clientId"` // AppId приложения открытой платформы Tuya
+	Secret   string `json:"secret"`   // Секретный ключ приложения открытой платформы Tuya
 
-	AuthMode string `json:"authMode"` // 授权模式，为"easy" / "auth"
+	AuthMode string `json:"authMode"` // Режим авторизации, для "easy" / "auth"
 
 	Easy Easy `json:"easy"`
 	Auth Auth `json:"auth"`
 
-	DeviceID string `json:"deviceId"` // Sample要连接的设备id
+	DeviceID string `json:"deviceId"` // Пример идентификатора устройства для подключения
 
-	UID          string `json:"-"` // 设备ID所属的用户ID，easy模式下人工填写，auth模式通过授权码获取access_token会返回用户ID
-	MQTTUID      string `json:"-"` // 与涂鸦MQTT通信时Web端的Topic标识ID
-	AccessToken  string `json:"-"` // 涂鸦开放平台授权码模式返回的access_token
-	RefreshToken string `json:"-"` // 涂鸦开放平台授权码模式返回的refresh_token
-	ExpireTime   int64  `json:"-"` // 涂鸦开放平台授权码模式返回的token有效期
+	UID          string `json:"-"` // Идентификатор пользователя, которому принадлежит идентификатор устройства, заполненный вручную в простом режиме, access_token, полученный через код авторизации в режиме авторизации, вернет идентификатор пользователя
+	MQTTUID      string `json:"-"` // Идентификатор темы на веб-странице при общении с Tuya MQTT
+	AccessToken  string `json:"-"` // Access_token, возвращаемый режимом кода авторизации Tuya Open Platform
+	RefreshToken string `json:"-"` // Refresh_token, возвращаемый режимом кода авторизации Tuya Open Platform.
+	ExpireTime   int64  `json:"-"` // Срок действия токена, возвращаемого режимом кода авторизации Tuya Open Platform.
 }
 
 var App = APPConfig{
@@ -42,7 +44,7 @@ var App = APPConfig{
 	OpenAPIURL:  "openapi.tuyacn.com",
 }
 
-// LoadConfig 加载webrtc.json配置到运行时环境
+// LoadConfig нагрузка webrtc.json Настроен на среду выполнения
 func LoadConfig() error {
 	return parseJSON("webrtc.json", &App)
 }

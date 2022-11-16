@@ -2,44 +2,44 @@ package types
 
 import "github.com/gorilla/websocket"
 
-// WsMessage WebSocket通道收发消息的顶层结构体
+// WsMessage Структура верхнего уровня канала WebSocket для отправки и получения сообщений
 type WsMessage struct {
-	Conn *websocket.Conn `json:"-"` // WebSocket连接，与Web客户端连接
+	Conn *websocket.Conn `json:"-"` // Соединение WebSocket, соединение с веб-клиентом
 
-	AgentID string `json:"agentId"` // 浏览器页面代理ID
+	AgentID string `json:"agentId"` // Идентификатор прокси-сервера страницы браузера
 
-	Type      string `json:"type"`              // 消息类型，为offer、candidate、answer
-	SessionID string `json:"sessionId"`         // 会话id
-	Payload   string `json:"payload,omitempty"` // WebSocket承载的消息内容
+	Type      string `json:"type"`              // тип сообщения, для offer、candidate、answer
+	SessionID string `json:"sessionId"`         // идентификатор сессии
+	Payload   string `json:"payload,omitempty"` // Содержимое сообщения, передаваемое WebSocket
 
-	Success bool `json:"success"` // 标志WebSocket请求是否成功，仅给Web客户端回复时有效
+	Success bool `json:"success"` // Отмечает успешность запроса WebSocket, действителен только при ответе веб-клиенту.
 }
 
 type OpenIoTHubConfig struct {
-	Url      string `json:"url"`       // mqtt连接地址（包括protocol、ip、port）
-	ClientID string `json:"client_id"` // mqtt连接client_id（用户账号及unique_id 生成的一个唯一不变的映射）一个clientId 即可以用于发布也可以订阅
-	Username string `json:"username"`  // mqtt连接用户名（用户账号生成的一个唯一不变的映射）
-	Password string `json:"password"`  // mqtt连接密码 ，失效期内该字段不变
+	Url      string `json:"url"`       // адрес подключения mqtt (включая протокол, ip, порт)
+	ClientID string `json:"client_id"` // mqtt подключает client_id (уникальное и постоянное сопоставление, сгенерированное учетной записью пользователя и unique_id), clientId можно использовать для публикации или подписки.
+	Username string `json:"username"`  // имя пользователя подключения mqtt (уникальное и постоянное сопоставление, созданное учетной записью пользователя)
+	Password string `json:"password"`  // mqtt пароль для подключения, это поле остается неизменным в течение срока действия
 
-	// 发布topic，控制设备可通过该topic完成
+	// Опубликуйте тему, управление устройством можно пройти через эту тему
 	SinkTopic struct {
 		IPC string `json:"ipc"`
 	} `json:"sink_topic"`
 
-	// 订阅topic，设备事件、设备状态同步，可以订阅该topic
+	// Подпишитесь на тему, событие устройства, синхронизация состояния устройства, вы можете подписаться на эту тему
 	SourceSink struct {
 		IPC string `json:"ipc"`
 	} `json:"source_topic"`
 
-	ExpireTime int `json:"expire_time"` // 当前配置有效时长，当前配置失效后所有的连接都将断开
+	ExpireTime int `json:"expire_time"` // Действительная продолжительность текущей конфигурации, все соединения будут отключены после того, как текущая конфигурация станет недействительной.
 }
 
-// OpenIoTHubConfigRequest 向开放平台申请mqtt连接的http请求体
+// OpenIoTHubConfigRequest Подать заявку на получение тела http-запроса mqtt-соединения с открытой платформой.
 type OpenIoTHubConfigRequest struct {
-	UID      string `json:"uid"`       // 涂鸦用户id
-	UniqueID string `json:"unique_id"` // 连接端按unique_id隔离，当同一用户需要在多端登录时，调用方需要保证unique_id不同
-	LinkType string `json:"link_type"` // 连接类型，暂只支持mqtt
-	Topics   string `json:"topics"`    // 关注的mqtt topic，本Sample只关注ipc topic
+	UID      string `json:"uid"`       // Идентификатор пользователя Туя
+	UniqueID string `json:"unique_id"` // Конец соединения изолирован уникальным_идентификатором. Когда одному и тому же пользователю необходимо войти в систему на нескольких концах, вызывающая сторона должна убедиться, что уникальный_идентификатор отличается.
+	LinkType string `json:"link_type"` // Тип подключения, на данный момент поддерживает только mqtt
+	Topics   string `json:"topics"`    // mqtt беспокойства тема, этот пример посвящен только IPC topic
 }
 
 // Token ICE Token from OpenAPI
